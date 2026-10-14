@@ -82,6 +82,18 @@ static inline int nal_split(unsigned char *buf, unsigned char **nalptr,
         }
 
         if (pos < sc) {
+            /* Leading Annex B zero bytes are padding, not a NALU.  Only
+             * skip an all-zero gap on the initial call; retain raw input
+             * and trailing zeros belonging to later NALUs. */
+            if (pos == 0) {
+                size_t padding = 0;
+                while (padding < sc && buf[padding] == 0)
+                    padding++;
+                if (padding == sc) {
+                    pos = sc;
+                    continue;
+                }
+            }
             /* NALU payload from pos up to the start code */
             *nalptr = buf + pos;
             *p_len  = sc - pos;
