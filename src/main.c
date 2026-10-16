@@ -1,3 +1,7 @@
+#ifdef DIVINUS_OWNED_INPUT
+#include "owned_input.h"
+int main(int argc,char **argv){return owned_input_main(argc,argv);}
+#else
 #include "app_config.h"
 #include "hal/macros.h"
 #include "http_post.h"
@@ -152,3 +156,5 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Main thread is shutting down...\n");
     return EXIT_SUCCESS;
 }
+
+#endif /* DIVINUS_OWNED_INPUT */

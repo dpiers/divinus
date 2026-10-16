@@ -1,0 +1,29 @@
+name: Owned input source tests
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  host:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg from Ubuntu repositories
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+      - name: Inventory host tools
+        run: |
+          gcc-13 --version
+          python3 --version
+          ffmpeg -version
+          ffprobe -version
+      - name: Actual application, sanitizers, RTSP and localhost decoding
+        run: python3 tools/test_owned_input.py --out "$RUNNER_TEMP/owned-input-results" --cc gcc-13 --rtsp --ffmpeg /usr/bin/ffmpeg --ffprobe /usr/bin/ffprobe
+# No release/upload/deployment and no private-toolchain download. The hosted
+# image receives updates; output receipts inventory actual compiler versions.
+# Local MIPS validation requires an explicit compiler and checked toolchain pin.

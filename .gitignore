@@ -5,3 +5,7 @@
 /toolchain
 compile_flags.txt
 divinus
+
+/owned-build/
+/owned-test-results/
+__pycache__/

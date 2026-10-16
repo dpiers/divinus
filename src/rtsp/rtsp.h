@@ -6,6 +6,10 @@
 #include <arpa/inet.h>
 
 #include "rtsp_server.h"
+#ifdef DIVINUS_OWNED_INPUT
+#include <stdatomic.h>
+#include <stdint.h>
+#endif
 
 #include "common.h"
 #include "rfc.h"
@@ -96,6 +100,13 @@ typedef struct {
 } transport_t;
 
 struct connection_item_t {
+#ifdef DIVINUS_OWNED_INPUT
+    rtsp_handle owner;
+    char request[__RTSP_TCP_BUF_SIZE + 1];
+    size_t request_len, interleaved_left;
+    int64_t request_since, accepted_at, last_request, last_sr_ms, response_deadline;
+    uint32_t tx_packets, tx_payload_octets;
+#endif
     struct sockaddr_in addr;
     FILE *fp_tcp_read;
     FILE *fp_tcp_write;
@@ -129,6 +140,19 @@ struct transfer_item_t {
 
 struct __rtsp_obj_t {
     pthread_mutex_t mutex;
+#ifdef DIVINUS_OWNED_INPUT
+    struct rtsp_owned_options owned_options;
+    char bind_address[INET_ADDRSTRLEN];
+    char authorization[96];
+    atomic_int stopping;
+    int listener, wake[2], started, thread_created;
+    pthread_t worker;
+    struct connection_item_t *connections;
+    uint32_t frame_timestamp;
+    uint64_t session_serial;
+    int64_t write_deadline;
+    int send_error;
+#endif
     struct list_head_t con_list;
     threadpool_handle pool;
     bufpool_handle con_pool;
@@ -158,6 +182,14 @@ struct sock_select_t {
     int nfds;
     rtsp_handle h_rtsp;
 };
+
+#ifdef DIVINUS_OWNED_INPUT
+int rtsp_owned_rtcp(struct connection_item_t *c); /* caller holds handle mutex */
+void rtsp_owned_drop(struct connection_item_t *c); /* caller holds handle mutex */
+int rtsp_owned_stopping(rtsp_handle h);
+int64_t rtsp_owned_now_ms(void);
+int rtsp_owned_write(rtsp_handle h, int fd, const void *buf, size_t len, int64_t deadline);
+#endif
 
 /******************************************************************************
  *              FUNCTION DECLARATIONS

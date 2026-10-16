@@ -1,0 +1,18 @@
+{
+  "origin": "Accepted OpenIPC NT98513 owned capture session v2, DAN-273; source-only files authored in 828-cam-fw",
+  "acceptance_sha256": "3932f9367537eca8950c231c914e07554669747633828535191e7d3fe18e2d39",
+  "files": {
+    "bsp/nt98513-owned-capture/linux/nt98513_capture_uapi.h": "02878a7d8e0685fc0c940d2b3c17fb1588d115214c5ec02fca112be77710bd9f",
+    "bsp/nt98513-owned-capture/userspace/reader_contract.h": "1ee3f37b709098a94fb2621e0004edfbd23368b5644ca8fefc18f84777b539d8",
+    "bsp/nt98513-owned-capture/wire.h": "b988379d591ae89acfa685cddd6d19cb73c94bedd49111a6ea823d9ce56bb406",
+    "include/nt98513_annexb.h": "690c02a613688d25963d945eb263148bca8b1151c7d241051907ead481725f8b",
+    "include/nt98513_capture_session.h": "8a6d8645a1d9a35137b94b62aff7de159563763622b3835fd0fafa08c4e7e3f6",
+    "include/nt98513_divinus_bridge.h": "d88459e295f7e471b9b0e496b8c6f7848914930ec358cf49fbd1515f1b73e90d",
+    "src/nt98513_annexb.c": "9b746bacd4c773329da78639cb11ad0997f56fe2fb2e4e48ccc434235259dc8d",
+    "src/nt98513_capture_session.c": "ea2f3f73cd4cef28b64c86e3d87bcec150c70558dbb8cb7986ee84b491c35e0c",
+    "src/nt98513_capture_session_posix.c": "ddb0e432c8c0b6f3ffd101f3a48176a60798eaac433ff58544c6c97935bd055c",
+    "src/nt98513_divinus_bridge.c": "3ec47a0dea357cedc5425158515db21db42630ad3fdb4b8332e0c949404e35ff"
+  },
+  "licenses": "MIT parser/bridge; GPL-2.0-only session/reader/wire; GPL-2.0 WITH Linux-syscall-note UAPI",
+  "firmware_or_sdk_blobs": false
+}

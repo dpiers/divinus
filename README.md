@@ -113,3 +113,7 @@ Please **_[support our project](https://openipc.org/support-open-source)_** with
 [telegram]: https://openipc.org/our-channels
 [website]: https://openipc.org
 [wiki]: https://github.com/openipc/wiki
+
+## Explicit owned encoded input
+
+The optional [owned-input target](docs/owned-input.md) consumes an already configured NT98513 capture endpoint without identifying a HAL or initializing a camera SDK. The ordinary build remains the default.
