@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "common.h"
 #include "mime.h"
 /******************************************************************************
@@ -62,19 +63,23 @@ error:
 mime_encoded_handle mime_base64_create(char *src, size_t len)
 {
     mime_encoded_handle nh = NULL;
-    int i;
+    size_t i;
     char *result = NULL;
     char *p;
     DASSERT(src, return NULL);
     DASSERT(len > 0, return NULL);
 
 
+    /* Four output bytes per rounded-up triplet, plus terminating NUL. */
+    if (len > SIZE_MAX - 2 || (len + 2) / 3 > (SIZE_MAX - 1) / 4)
+        return NULL;
+    size_t capacity = ((len + 2) / 3) * 4 + 1;
     TALLOC(nh, return NULL);
    
-    ASSERT(result = calloc(len * 2 + 1, sizeof(char)), goto error);
+    ASSERT(result = calloc(capacity, sizeof(char)), goto error);
     p = result;
 
-    for(i = 0; i <= len - 3; i+=3) {
+    for(i = 0; i + 3 <= len; i+=3) {
         *(p++) = __base64_charmap[(src[i] & 0xFC) >> 2];
         *(p++) = __base64_charmap[((src[i] & 0x03) << 4) | ((src[i+1] & 0xF0) >> 4)];
         *(p++) = __base64_charmap[((src[i+1] & 0x0F) << 2) | ((src[i+2] & 0xC0) >> 6)];

@@ -1,0 +1,8 @@
+# Owned encoded-input mode; this example intentionally cannot start unchanged.
+# Copy to an absolute path, owned by the process UID, mode 0600; choose credentials.
+# No camera or SDK is initialized. Endpoint and external keeper must exist first.
+bind=127.0.0.1
+port=8554
+user=
+password=
+timestamp=linux-monotonic-arrival

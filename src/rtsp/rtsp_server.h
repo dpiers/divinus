@@ -35,6 +35,22 @@ int rtp_send_mp3(rtsp_handle h, unsigned char *buf, size_t len);
 int rtp_send_pcma(rtsp_handle h, unsigned char *buf, size_t len);
 int rtp_send_pcmu(rtsp_handle h, unsigned char *buf, size_t len);
 
+/* Owned mode is a compile-selected application path. The capture worker alone
+ * prepares, seeds with rtp_send_h26x, starts, sends and finishes this handle.
+ * Callbacks/context must remain alive until finish returns. */
+#ifdef DIVINUS_OWNED_INPUT
+struct rtsp_owned_options {
+    const char *bind_address, *user, *pass;
+    unsigned short port;
+    int (*should_stop)(void *);
+    void (*failed)(void *, int);
+    void *context;
+};
+int rtsp_owned_prepare(const struct rtsp_owned_options *, rtsp_handle *out);
+int rtsp_owned_start(rtsp_handle, unsigned short *bound_port);
+int rtsp_owned_finish(rtsp_handle);
+#endif
+
 extern void rtsp_finish(rtsp_handle h);
 
 extern rtsp_handle rtsp_create(unsigned char max_con, unsigned int port, int priority);
