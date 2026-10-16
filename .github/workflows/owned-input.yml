@@ -12,7 +12,11 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-      - name: Inventory supplied host tools
+      - name: Install FFmpeg from Ubuntu repositories
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+      - name: Inventory host tools
         run: |
           gcc-13 --version
           python3 --version
